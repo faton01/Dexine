@@ -35,7 +35,7 @@ export function Footer() {
           </div>
           <div>
             <span className="mono muted">help</span>
-            <Link href="/info/shipping-returns">shipping & returns</Link>
+            {site.sellingEnabled && <Link href="/info/shipping-returns">shipping & returns</Link>}
             <a href={`mailto:${site.contactEmail}`}>contact</a>
           </div>
         </div>

@@ -21,6 +21,15 @@ export const site = {
   },
   contactEmail: "[hello@your-domain.com]",
 
+  /**
+   * false = enquiry mode: the product page shows "email us about this print"
+   * (pre-filled with the print and size) instead of "add to bag", and the bag
+   * is hidden. Flip to true to turn the cart + Stripe checkout back on.
+   */
+  sellingEnabled: false as boolean,
+  /** Where print enquiries are sent. */
+  enquiryEmail: "itakdeniz@gmail.com",
+
   /** Countries Stripe will accept a shipping address from. */
   shippingCountries: ["GB", "IE", "FR", "DE", "NL", "BE", "ES", "IT", "PT", "AT", "DK", "SE", "TR", "US", "CA"] as const,
 

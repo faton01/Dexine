@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { shippingInfo, site } from "@/content/site";
+import { notFound } from "next/navigation";
 import { formatPrice } from "@/lib/catalog";
 
 export const metadata: Metadata = { title: "shipping & returns", alternates: { canonical: "/info/shipping-returns" } };
 
 export default function ShippingPage() {
+  // Hidden while the shop is enquiry-only (see site.sellingEnabled).
+  if (!site.sellingEnabled) notFound();
   return (
     <div className="info">
       <h1 className="display-xxl">shipping & returns</h1>

@@ -50,7 +50,8 @@ export default async function ProductPage({ params }: Props) {
     image: product.images.filter((i) => i.src).map((i) => new URL(i.src!, site.url).toString()),
     brand: { "@type": "Brand", name: "dexine" },
     creator: { "@type": "Person", name: site.artist },
-    offers: {
+    // Prices are only published while the shop is selling.
+    offers: !site.sellingEnabled ? undefined : {
       "@type": "AggregateOffer",
       priceCurrency: site.currency,
       lowPrice: (minPrice(product) / 100).toFixed(2),
@@ -115,7 +116,7 @@ export default async function ProductPage({ params }: Props) {
                 ))}
               </ul>
             </details>
-            <details>
+            {site.sellingEnabled && <details>
               <summary>shipping & returns</summary>
               {shippingInfo.sections.slice(0, 3).map((s) => (
                 <p key={s.title}>
@@ -123,7 +124,7 @@ export default async function ProductPage({ params }: Props) {
                 </p>
               ))}
               <Link href="/info/shipping-returns" className="arrow-link">full policy →</Link>
-            </details>
+            </details>}
           </div>
         </aside>
       </div>

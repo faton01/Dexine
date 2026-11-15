@@ -3,7 +3,32 @@
 import { useState } from "react";
 import type { Product } from "@/content/types";
 import { formatPrice } from "@/lib/catalog";
+import { site } from "@/content/site";
 import { useCart } from "./CartProvider";
+
+/** Subject + body of the enquiry email, with the chosen print and size already written in. */
+function enquiry(product: Product, variant: Product["variants"][number]) {
+  const dims = variant.widthCm ? ` (${variant.widthCm} × ${variant.heightCm} cm)` : "";
+  const subject = `${product.title} — ${variant.label}`;
+  // Blank lines at the top leave room for the customer's own message.
+  const body = [
+    "Hi Deniz,",
+    "",
+    "",
+    "",
+    "———",
+    `Print: ${product.title}`,
+    `Size: ${variant.label}${dims}`,
+    new URL(`/shop/${product.slug}`, site.url).toString(),
+  ].join("\n");
+  const q = (s: string) => encodeURIComponent(s);
+  return {
+    /** Opens the visitor's default email app. */
+    mailto: `mailto:${site.enquiryEmail}?subject=${q(subject)}&body=${q(body)}`,
+    /** Opens a Gmail compose window (the Gmail app on phones where it's installed, otherwise gmail.com). */
+    gmail: `https://mail.google.com/mail/?view=cm&fs=1&to=${q(site.enquiryEmail)}&su=${q(subject)}&body=${q(body)}`,
+  };
+}
 
 /** Size picker + add to cart. Includes a to-scale size comparison for prints. */
 export function AddToCart({ product }: { product: Product }) {
@@ -34,7 +59,9 @@ export function AddToCart({ product }: { product: Product }) {
                 {v.widthCm} × {v.heightCm} cm
               </span>
             )}
-            <span className="size__price">{v.inStock === false ? "sold out" : formatPrice(v.price)}</span>
+            {site.sellingEnabled && (
+              <span className="size__price">{v.inStock === false ? "sold out" : formatPrice(v.price)}</span>
+            )}
           </label>
         ))}
       </fieldset>
@@ -56,9 +83,24 @@ export function AddToCart({ product }: { product: Product }) {
         </div>
       )}
 
-      <button className="btn btn--blue btn--full btn--lg" disabled={soldOut} onClick={() => add(variant.id)}>
-        {soldOut ? "sold out" : <>add to bag — {formatPrice(variant.price)}</>}
-      </button>
+      {site.sellingEnabled ? (
+        <button className="btn btn--blue btn--full btn--lg" disabled={soldOut} onClick={() => add(variant.id)}>
+          {soldOut ? "sold out" : <>add to bag — {formatPrice(variant.price)}</>}
+        </button>
+      ) : (
+        <div className="atc__enquire">
+          <a className="btn btn--blue btn--full btn--lg" href={enquiry(product, variant).mailto}>
+            send us an email — {variant.label}
+          </a>
+          <a className="mono small" href={enquiry(product, variant).gmail} target="_blank" rel="noopener noreferrer">
+            or open in gmail ↗
+          </a>
+          <p className="mono muted small">
+            opens your email with the print and size filled in — add your message and send. no email app? write to{" "}
+            <a href={`mailto:${site.enquiryEmail}`}>{site.enquiryEmail}</a>
+          </p>
+        </div>
+      )}
     </div>
   );
 }

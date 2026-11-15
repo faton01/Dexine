@@ -16,7 +16,7 @@ import { useEffect, useRef, useState } from "react";
 export const INTRO_KEY = "dexine-intro-v1";
 
 /** Runs in <head> before paint. Kept tiny and dependency-free. */
-export const introBootScript = `try{var s=location.search.indexOf('intro')>-1;if((s||!localStorage.getItem('${INTRO_KEY}'))&&!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.setAttribute('data-intro','')}catch(e){}`;
+export const introBootScript = `try{var s=location.search.indexOf('intro')>-1;if((s||!localStorage.getItem('${INTRO_KEY}'))&&!matchMedia('(prefers-reduced-motion: reduce)').matches){var r=document.documentElement;r.setAttribute('data-intro','');setTimeout(function(){if(!r.classList.contains('intro-out'))r.removeAttribute('data-intro')},6000)}}catch(e){}`;
 
 const PLAY_MS = 2200; // time before the exit starts
 const EXIT_MS = 1650; // must cover the exit animations in globals.css (overlay fade + site ease-in)

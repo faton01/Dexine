@@ -64,9 +64,11 @@ export function Header() {
             ))}
           </nav>
           <div className="header__actions">
-            <button className="bag-btn" onClick={() => setOpen(true)} aria-label={`Open bag, ${count} items`}>
-              bag <span className="bag-btn__count">{count}</span>
-            </button>
+            {site.sellingEnabled && (
+              <button className="bag-btn" onClick={() => setOpen(true)} aria-label={`Open bag, ${count} items`}>
+                bag <span className="bag-btn__count">{count}</span>
+              </button>
+            )}
             <button
               ref={menuBtnRef}
               className="menu-btn"
@@ -118,21 +120,25 @@ export function Header() {
         </nav>
 
         <div className="mmenu__foot">
-          <button
-            className="mmenu__bag"
-            onClick={() => {
-              setMenu(false);
-              setOpen(true);
-            }}
-          >
-            bag ({count})
-          </button>
+          {site.sellingEnabled && (
+            <button
+              className="mmenu__bag"
+              onClick={() => {
+                setMenu(false);
+                setOpen(true);
+              }}
+            >
+              bag ({count})
+            </button>
+          )}
           <a href={site.instagram.url} target="_blank" rel="noopener noreferrer">
             instagram ↗
           </a>
-          <Link href="/info/shipping-returns" onClick={() => setMenu(false)}>
-            shipping & returns
-          </Link>
+          {site.sellingEnabled && (
+            <Link href="/info/shipping-returns" onClick={() => setMenu(false)}>
+              shipping & returns
+            </Link>
+          )}
         </div>
         </div>
       </div>

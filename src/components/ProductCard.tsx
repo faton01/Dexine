@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Product } from "@/content/types";
 import { formatPrice, minPrice } from "@/lib/catalog";
+import { site } from "@/content/site";
 import { ArtImage } from "./ArtImage";
 
 export function ProductCard({ product, index }: { product: Product; index?: number }) {
@@ -18,7 +19,7 @@ export function ProductCard({ product, index }: { product: Product; index?: numb
       <div className="pcard__meta">
         {index !== undefined && <span className="mono muted">{String(index + 1).padStart(2, "0")}</span>}
         <span className="pcard__title">{product.title}</span>
-        <span className="pcard__price mono">from {formatPrice(minPrice(product))}</span>
+        {site.sellingEnabled && <span className="pcard__price mono">from {formatPrice(minPrice(product))}</span>}
       </div>
     </Link>
   );

@@ -74,12 +74,14 @@ export function AddToCart({ product }: { product: Product }) {
 
       {sized.length > 1 && (
         <div className="scale" aria-hidden="true">
+          {/* Clickable shortcut for the radios above; hidden from assistive tech, which uses the radios. */}
           <div className="scale__row">
             {sized.map((v) => (
               <div
                 key={v.id}
                 className={`scale__sheet ${v.id === selected ? "is-selected" : ""}`}
                 style={{ width: `calc(${unit} * ${v.widthCm})`, aspectRatio: `${v.widthCm} / ${v.heightCm}` }}
+                onClick={() => setSelected(v.id)}
               >
                 <span>{v.label}</span>
               </div>

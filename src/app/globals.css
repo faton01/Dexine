@@ -458,8 +458,10 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .scale__sheet {
   flex: none; box-sizing: border-box; min-width: 0; overflow: hidden;
   border: 1.5px solid var(--ink); display: flex; align-items: flex-end; padding: 4px;
-  font-family: var(--mono); font-size: 10px; transition: background 0.25s, color 0.25s;
+  font-family: var(--mono); font-size: 10px; transition: background 0.25s, color 0.25s, border-color 0.25s;
+  cursor: pointer;
 }
+@media (hover: hover) { .scale__sheet:not(.is-selected):hover { border-color: var(--blue); color: var(--blue); } }
 .scale__sheet.is-selected { background: var(--blue); border-color: var(--blue); color: var(--paper); }
 
 .accordions { border-top: 1.5px solid var(--ink); }

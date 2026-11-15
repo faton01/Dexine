@@ -39,6 +39,12 @@ export function AddToCart({ product }: { product: Product }) {
   const soldOut = variant.inStock === false;
   const sized = product.variants.filter((v) => v.widthCm && v.heightCm);
   const maxH = Math.max(...sized.map((v) => v.heightCm!), 1);
+  const sumW = sized.reduce((s, v) => s + v.widthCm!, 0) || 1;
+  // One cm→px factor for every sheet: as large as the 110px row height allows,
+  // but never wider than the column (landscape sizes would otherwise overflow it).
+  const GAP = 10;
+  const SCALE_H = 110;
+  const unit = `min(${SCALE_H / maxH}px, (100% - ${GAP * (sized.length - 1)}px) / ${sumW})`;
 
   return (
     <div className="atc">
@@ -73,7 +79,7 @@ export function AddToCart({ product }: { product: Product }) {
               <div
                 key={v.id}
                 className={`scale__sheet ${v.id === selected ? "is-selected" : ""}`}
-                style={{ height: `${(v.heightCm! / maxH) * 100}%`, aspectRatio: `${v.widthCm} / ${v.heightCm}` }}
+                style={{ width: `calc(${unit} * ${v.widthCm})`, aspectRatio: `${v.widthCm} / ${v.heightCm}` }}
               >
                 <span>{v.label}</span>
               </div>
